@@ -5,14 +5,38 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
 import OrderLookup from './components/OrderLookup';
-
+import Login from './components/Login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('PRODUCTS');
   const [cart, setCart] = useState([]);
   const [lookupVisible, setLookupVisible] = useState(false);
+  const [userToken, setUserToken] = useState(null);
+
+  React.useEffect(() => {
+    const bootstrapAsync = async () => {
+      let token;
+      try {
+        token = await AsyncStorage.getItem('userToken');
+      } catch (e) {
+        // Restoring token failed
+      }
+      setUserToken(token);
+    };
+    bootstrapAsync();
+  }, []);
 
   const navigateToCart = () => setCurrentScreen('CART');
   const navigateToProducts = () => setCurrentScreen('PRODUCTS');
+  
+  const handleLogout = async () => {
+      await AsyncStorage.removeItem('userToken');
+      setUserToken(null);
+  };
+
+  if (userToken == null) {
+      return <Login onLoginSuccess={setUserToken} />;
+  }
 
   return (
     <SafeAreaProvider>
@@ -22,6 +46,9 @@ export default function App() {
             <Text style={styles.headerTitle}>Awesome Shop</Text>
           </TouchableOpacity>
           <View style={styles.headerRight}>
+            <TouchableOpacity testID="logout-button" style={styles.iconButton} onPress={handleLogout}>
+              <Text style={styles.iconButtonText}>🚪</Text>
+            </TouchableOpacity>
             <TouchableOpacity testID="search-order-button" style={styles.iconButton} onPress={() => setLookupVisible(true)}>
               <Text style={styles.iconButtonText}>🔍</Text>
             </TouchableOpacity>

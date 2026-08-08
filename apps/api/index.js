@@ -16,6 +16,9 @@ let savedCarts = {};
 let orders = {};
 
 app.get('/api/products', (req, res) => {
+    if (req.query.fail === 'true') {
+        return res.status(500).json({ error: 'Simulated Network Error' });
+    }
     res.json(products);
 });
 
@@ -52,6 +55,14 @@ app.post('/api/checkout', (req, res) => {
     const orderId = 'ORD-' + Math.floor(Math.random() * 1000000);
     orders[orderId] = cart; // Save the order details
     res.json({ success: true, message: 'Order received', orderId });
+});
+
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ success: false, message: 'Username and password required' });
+    }
+    res.json({ success: true, token: 'mock-jwt-token-12345' });
 });
 
 app.get('/api/orders/:id', (req, res) => {

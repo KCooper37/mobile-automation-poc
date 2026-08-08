@@ -1,0 +1,13 @@
+appId: com.anonymous.mobile
+---
+- launchApp
+- assertVisible: "Login"
+- tapOn: "Username"
+- inputText: "admin"
+- tapOn: "Password"
+- inputText: "password"
+- tapOn: "Login"
+- assertVisible: "Awesome Shop"
+- tapOn:
+    id: "logout-button"
+- assertVisible: "Awesome Shop Login"

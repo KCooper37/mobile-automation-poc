@@ -9,9 +9,9 @@ describe('Save Cart Flow', () => {
 
   it('should stack identical items, calculate total, and save the cart', async () => {
     // 1. Add 'Sample Item' to cart 3 times to test stacking logic
-    await element(by.id('add-to-cart-1')).tap();
-    await element(by.id('add-to-cart-1')).tap();
-    await element(by.id('add-to-cart-1')).tap();
+    await element(by.label('Add Sample Item to cart')).tap();
+    await element(by.label('Add Sample Item to cart')).tap();
+    await element(by.label('Add Sample Item to cart')).tap();
 
     // 2. Navigate to Cart
     await element(by.id('cart-icon-button')).tap();

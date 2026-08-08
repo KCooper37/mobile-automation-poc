@@ -87,7 +87,13 @@ const Cart = ({ cart, setCart, onBack }) => {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.sectionTitle}>Your Cart</Text>
-        <TouchableOpacity testID="back-to-products" onPress={onBack}>
+        <TouchableOpacity 
+          testID="back-to-products" 
+          onPress={onBack}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Go back to products"
+        >
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
       </View>
@@ -124,7 +130,13 @@ const Cart = ({ cart, setCart, onBack }) => {
           value={cartName}
           onChangeText={setCartName}
         />
-        <TouchableOpacity style={styles.secondaryBtn} onPress={saveCartForLater}>
+        <TouchableOpacity 
+          style={styles.secondaryBtn} 
+          onPress={saveCartForLater}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Save cart for later"
+        >
           <Text style={styles.secondaryBtnText}>Save Cart</Text>
         </TouchableOpacity>
       </View>
@@ -149,6 +161,9 @@ const Cart = ({ cart, setCart, onBack }) => {
         testID="checkout-button"
         style={styles.checkoutBtn}
         onPress={handleCheckout}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Checkout Cart"
       >
         <Text style={styles.checkoutBtnText}>Checkout Cart</Text>
       </TouchableOpacity>

@@ -27,7 +27,7 @@ describe('Core Checkout Flow', () => {
     await expect(element(by.text('$19.98'))).toBeVisible();
 
     // 5. Checkout
-    await element(by.id('checkout-button')).tap();
+    await element(by.label('Checkout Cart')).tap();
 
     // 6. Assert success status appears
     await expect(element(by.id('checkout-status'))).toHaveText('Success! Order placed.');

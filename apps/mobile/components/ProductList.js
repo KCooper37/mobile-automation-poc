@@ -4,6 +4,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react
 const ProductList = ({ cart, setCart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch('http://10.0.2.2:3005/api/products')
@@ -17,6 +18,7 @@ const ProductList = ({ cart, setCart }) => {
       })
       .catch(err => {
         console.error("Fetch Error:", err);
+        setError("Network Connection Lost");
         setLoading(false);
       });
   }, []);
@@ -32,6 +34,15 @@ const ProductList = ({ cart, setCart }) => {
 
   if (loading) {
     return <Text style={styles.loading}>Loading amazing products...</Text>;
+  }
+
+  if (error) {
+    return (
+      <View testID="network-error-state" style={styles.errorContainer}>
+        <Text style={styles.errorText}>📡 {error}</Text>
+        <Text style={styles.errorSubText}>Please check your connection and try again.</Text>
+      </View>
+    );
   }
 
   return (
@@ -51,7 +62,14 @@ const ProductList = ({ cart, setCart }) => {
                 <Text style={styles.productName}>{item.name}</Text>
                 <Text style={styles.productPrice}>${item.price}</Text>
               </View>
-              <TouchableOpacity testID={`add-to-cart-${item.id}`} style={styles.addButton} onPress={() => addToCart(item)}>
+              <TouchableOpacity 
+                testID={`add-to-cart-${item.id}`} 
+                style={styles.addButton} 
+                onPress={() => addToCart(item)}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={`Add ${item.name} to cart`}
+              >
                 <Text style={styles.addButtonText}>Add to Cart 🛒</Text>
               </TouchableOpacity>
             </View>
@@ -66,6 +84,9 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   sectionTitle: { fontSize: 24, fontWeight: '800', marginBottom: 16, color: '#111827' },
   loading: { marginTop: 60, textAlign: 'center', fontSize: 18, color: '#6B7280' },
+  errorContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
+  errorText: { fontSize: 22, fontWeight: 'bold', color: '#EF4444', marginBottom: 8 },
+  errorSubText: { fontSize: 16, color: '#6B7280', textAlign: 'center' },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,

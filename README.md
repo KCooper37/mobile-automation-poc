@@ -90,6 +90,19 @@ By installing `@axe-core/appium` inside the WebdriverIO suite, you can scan the 
 
 ---
 
+## 👁️ Visual Regression Testing (VRT)
+
+To ensure pixel-perfect rendering across different screen sizes and OS versions, this POC integrates **Applitools Eyes**.
+Applitools uses Visual AI to detect visual bugs rather than relying solely on DOM/view hierarchy matching.
+
+* **Architecture**: The VRT implementation is housed within the WebdriverIO suite (`apps/e2e-wdio/test/specs/vrt.spec.js`).
+* **Execution**: It utilizes the `@applitools/eyes-webdriverio` SDK alongside the `VisualGridRunner`.
+* **Cross-Environment**: The configuration allows for simulating how the app looks across multiple mock devices (e.g., iPhone 11 vs Pixel 5) simultaneously via the Applitools Ultrafast Grid.
+
+*Note: For the purpose of this portfolio piece, the execution code exists to demonstrate architectural knowledge but skips actual cloud execution unless a valid `APPLITOOLS_API_KEY` is provided in the environment.*
+
+---
+
 ## ⚡ Performance Testing (Flashlight / BAM)
 While E2E tests ensure functional correctness, mobile apps require strict performance auditing (60FPS rendering, minimal JS thread locks).
 In the React Native ecosystem, we recommend **Flashlight.dev**. It measures performance across E2E flows to ensure no new feature introduces dropped frames or heavy CPU spikes.

@@ -1,0 +1,18 @@
+appId: com.anonymous.mobile
+---
+- launchApp
+- assertVisible: "Username"
+- tapOn: "Username"
+- inputText: "admin"
+- tapOn: "Password"
+- inputText: "password"
+- tapOn: "Login"
+
+- mockNetwork:
+    - url: "http://10.0.2.2:3005/api/products"
+      method: GET
+      response: "Internal Server Error"
+      status: 500
+
+- assertVisible: "Network Connection Lost"
+- assertVisible: "Please check your connection and try again."
