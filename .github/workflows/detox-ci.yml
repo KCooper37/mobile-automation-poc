@@ -41,6 +41,5 @@ jobs:
           arch: x86_64
           profile: pixel_4
           script: |
-            cd apps/e2e-detox
-            npx detox build -c android.emu.debug
-            npx detox test -c android.emu.debug --headless
+            cd apps/e2e-detox && npx detox build -c android.emu.debug
+            cd apps/e2e-detox && npx detox test -c android.emu.debug --headless
