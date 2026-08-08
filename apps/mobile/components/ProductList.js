@@ -26,7 +26,7 @@ const ProductList = () => {
     <View testID="product-list" style={styles.container}>
       <FlatList
         data={products}
-        keyExtractor={item => (item.id ? item.id.toString() : Math.random().toString())}
+        keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
         renderItem={({ item }) => (
           <View testID="product-item" style={styles.item}>
             <Text>{item.name}</Text>
