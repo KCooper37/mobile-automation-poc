@@ -50,3 +50,6 @@ jobs:
             cd apps/e2e-maestro
             maestro test checkout-flow.yaml
             maestro test order-lookup-flow.yaml
+            maestro test save-cart-flow.yaml
+            maestro test login-flow.yaml
+            maestro test offline-flow.yaml
