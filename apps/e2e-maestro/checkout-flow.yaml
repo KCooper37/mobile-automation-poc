@@ -1,0 +1,15 @@
+appId: com.anonymous.mobile
+---
+- runScript: setup-cart.js
+
+- launchApp:
+    clearState: true
+
+- tapOn: "🛒"
+- assertVisible: "Your Cart"
+
+- tapOn: "maestro_e2e_cart"
+- assertVisible: "Success! Order placed.*"
+
+- tapOn: "Checkout Cart"
+- assertVisible: "Order ID: ORD-*"

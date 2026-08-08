@@ -1,0 +1,28 @@
+appId: com.anonymous.mobile
+---
+- launchApp:
+    clearState: true
+
+# Add item 3 times to test stacking
+- tapOn:
+    id: "add-to-cart-1"
+- tapOn:
+    id: "add-to-cart-1"
+- tapOn:
+    id: "add-to-cart-1"
+
+- tapOn: "🛒"
+
+# Assert the item is there, but stacked (total $29.97)
+- assertVisible: "Qty: 3"
+- assertVisible: "\\$29.97"
+
+# Save the cart
+- tapOn: "Enter cart name to save"
+- inputText: "maestro_saved_cart"
+- hideKeyboard
+- tapOn: "Save Cart"
+
+# Assert success and new button appears
+- assertVisible: "Cart 'maestro_saved_cart' saved!"
+- assertVisible: "maestro_saved_cart"

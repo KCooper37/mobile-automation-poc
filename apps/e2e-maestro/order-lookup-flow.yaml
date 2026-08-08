@@ -1,0 +1,28 @@
+appId: com.anonymous.mobile
+---
+- runScript: setup-cart.js
+
+- launchApp:
+    clearState: true
+
+- tapOn: "🛒"
+- tapOn: "Load Seed Cart"
+- tapOn: "Checkout Cart"
+
+# Wait for Success Message
+- assertVisible: "Order ID: ORD-.*"
+
+# Copy the text containing the order ID
+- copyTextFrom:
+    id: "checkout-status"
+
+# Extract just the ID using a regex via JS eval
+- evalScript: ${output.orderId = maestro.copiedText.split('Order ID: ')[1]}
+
+- tapOn: "← Back"
+- tapOn: "🔍"
+- inputText: ${output.orderId}
+- tapOn: "Search"
+
+# Assert the result matches our scraped ID
+- assertVisible: "Order: ${output.orderId}"
