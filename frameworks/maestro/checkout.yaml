@@ -1,0 +1,7 @@
+appId: com.mobileautomationpoc
+---
+- launchApp
+- tapOn:
+    id: "checkout-button"
+- assertVisible:
+    id: "checkout-status"
