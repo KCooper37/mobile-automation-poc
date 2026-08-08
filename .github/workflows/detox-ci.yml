@@ -1,0 +1,46 @@
+name: Mobile E2E Tests (Detox)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  detox-tests:
+    runs-on: macos-13
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Start Mock API Backend
+        working-directory: ./apps/api
+        run: |
+          npm install
+          npm start &
+          sleep 3
+
+      - name: Install App Dependencies
+        working-directory: ./apps/mobile
+        run: npm install
+
+      - name: Install Detox Dependencies
+        working-directory: ./apps/e2e-detox
+        run: npm install
+
+      - name: Run Android Emulator & Detox
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: default
+          arch: x86_64
+          profile: pixel_4
+          script: |
+            cd apps/e2e-detox
+            npx detox build -c android.emu.debug
+            npx detox test -c android.emu.debug --headless
