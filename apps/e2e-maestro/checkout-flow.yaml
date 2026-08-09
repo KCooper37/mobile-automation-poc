@@ -4,6 +4,11 @@ appId: com.mobileautomationpoc
 
 - launchApp:
     clearState: true
+- tapOn: "Username"
+- inputText: "admin"
+- tapOn: "Password"
+- inputText: "password"
+- tapOn: "Login"
 
 - tapOn: "🛒"
 - assertVisible: "Your Cart"

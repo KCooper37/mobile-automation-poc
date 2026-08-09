@@ -6,7 +6,10 @@ describe('Core Checkout Flow', () => {
   });
 
   beforeEach(async () => {
-    await device.reloadReactNative();
+    await device.launchApp({ delete: true });
+    await element(by.id('username-input')).typeText('admin\n');
+    await element(by.id('password-input')).typeText('password\n');
+    await element(by.id('login-button')).tap();
   });
 
   it('should seed data via API, load cart, and checkout', async () => {

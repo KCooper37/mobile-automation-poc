@@ -6,7 +6,10 @@ describe('Order Lookup Flow', () => {
   });
 
   beforeEach(async () => {
-    await device.reloadReactNative();
+    await device.launchApp({ delete: true });
+    await element(by.id('username-input')).typeText('admin\n');
+    await element(by.id('password-input')).typeText('password\n');
+    await element(by.id('login-button')).tap();
   });
 
   it('should checkout, extract order ID from UI, and lookup the receipt', async () => {

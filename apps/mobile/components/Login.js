@@ -37,6 +37,7 @@ const Login = ({ onLoginSuccess }) => {
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize="none"
+                testID="username-input"
             />
             <TextInput 
                 style={styles.input} 
@@ -44,8 +45,9 @@ const Login = ({ onLoginSuccess }) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
+                testID="password-input"
             />
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <TouchableOpacity style={styles.button} onPress={handleLogin} testID="login-button">
                 <Text style={styles.buttonText}>Log In</Text>
             </TouchableOpacity>
         </View>

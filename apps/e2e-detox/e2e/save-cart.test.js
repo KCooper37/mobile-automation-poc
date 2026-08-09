@@ -4,7 +4,10 @@ describe('Save Cart Flow', () => {
   });
 
   beforeEach(async () => {
-    await device.reloadReactNative();
+    await device.launchApp({ delete: true });
+    await element(by.id('username-input')).typeText('admin\n');
+    await element(by.id('password-input')).typeText('password\n');
+    await element(by.id('login-button')).tap();
   });
 
   it('should stack identical items, calculate total, and save the cart', async () => {

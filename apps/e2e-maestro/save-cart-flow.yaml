@@ -2,6 +2,11 @@ appId: com.mobileautomationpoc
 ---
 - launchApp:
     clearState: true
+- tapOn: "Username"
+- inputText: "admin"
+- tapOn: "Password"
+- inputText: "password"
+- tapOn: "Login"
 
 # Add item 3 times to test stacking
 - tapOn:
