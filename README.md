@@ -111,12 +111,16 @@ In the React Native ecosystem, we recommend **Flashlight.dev**. It measures perf
 ---
 
 ## 🤖 CI/CD Integration
-This repository includes a fully configured **GitHub Actions** pipeline (`.github/workflows/maestro-ci.yml`) that automatically:
-1. Boots the Express API backend.
-2. Compiles the React Native application into a physical `.apk`.
-3. Spins up a headless Android Emulator via `reactivecircus/android-emulator-runner`.
-4. Executes the entire **Maestro** test suite against the built APK.
-This ensures zero regressions are merged into `main`.
+This repository includes fully configured **GitHub Actions** pipelines (`.github/workflows/maestro-ci.yml` and `detox-ci.yml`). 
+
+*Note: These pipelines are currently configured to run manually via `workflow_dispatch` rather than on every push. Running headless Android Emulators alongside the React Native Metro Bundler on GitHub's free-tier runners often hits CPU/Memory limits, leading to flakiness and bridge timeouts. For a POC, executing these suites locally is the recommended way to verify the architecture.*
+
+The pipelines are configured to:
+1. Boot the Express API backend.
+2. Compile the React Native application into a physical `.apk`.
+3. Start the Metro Bundler.
+4. Spin up a headless Android Emulator via `reactivecircus/android-emulator-runner`.
+5. Execute the test suites against the built APK.
 
 ---
 
