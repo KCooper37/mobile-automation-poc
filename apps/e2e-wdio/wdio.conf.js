@@ -3,7 +3,7 @@ const path = require('path');
 exports.config = {
     runner: 'local',
     port: 4723,
-    path: '/wd/hub',
+    path: '/',
     
     specs: [
         './test/specs/**/*.js'
@@ -19,7 +19,7 @@ exports.config = {
         'appium:automationName': 'UiAutomator2',
         // In a real run, you'd specify the built .apk path here, 
         // e.g., 'appium:app': path.join(process.cwd(), '../mobile/android/app/build/outputs/apk/debug/app-debug.apk'),
-        'appium:appPackage': 'com.anonymous.mobile',
+        'appium:appPackage': 'com.mobileautomationpoc',
         'appium:appActivity': '.MainActivity',
         'appium:autoGrantPermissions': true,
         'appium:newCommandTimeout': 240

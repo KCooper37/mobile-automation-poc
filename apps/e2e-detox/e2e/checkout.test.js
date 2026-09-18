@@ -14,7 +14,7 @@ describe('Core Checkout Flow', () => {
 
   it('should seed data via API, load cart, and checkout', async () => {
     // 1. API Setup
-    await axios.post('http://10.0.2.2:3005/api/carts', {
+    await axios.post('http://localhost:3005/api/carts', {
       name: 'detox_cart',
       cart: [{ id: 1, name: 'Sample Item', price: 9.99, quantity: 2 }]
     });
@@ -33,6 +33,7 @@ describe('Core Checkout Flow', () => {
     await element(by.label('Checkout Cart')).tap();
 
     // 6. Assert success status appears
-    await expect(element(by.id('checkout-status'))).toHaveText('Success! Order placed.');
+    await expect(element(by.id('checkout-status')))
+      .toHaveText(/^Success! Order placed\.\nOrder ID: ORD-\d+$/);
   });
 });

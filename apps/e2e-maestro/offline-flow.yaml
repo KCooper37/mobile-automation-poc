@@ -1,18 +1,19 @@
 appId: com.mobileautomationpoc
 ---
-- launchApp
+- setAirplaneMode: disabled
+- launchApp:
+    clearState: true
 - assertVisible: "Username"
 - tapOn: "Username"
 - inputText: "admin"
 - tapOn: "Password"
 - inputText: "password"
-- tapOn: "Login"
+- tapOn: "Log In"
 
-- mockNetwork:
-    - url: "http://10.0.2.2:3005/api/products"
-      method: GET
-      response: "Internal Server Error"
-      status: 500
-
+- assertVisible: "Featured Products"
+- setAirplaneMode: enabled
+- stopApp
+- launchApp
 - assertVisible: "Network Connection Lost"
 - assertVisible: "Please check your connection and try again."
+- setAirplaneMode: disabled

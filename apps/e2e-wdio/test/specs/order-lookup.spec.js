@@ -12,6 +12,10 @@ const OrderLookup = new OrderLookupModal();
 
 describe('Mobile App - Order Lookup Flow', () => {
 
+    beforeEach(async () => {
+        await ProductsScreen.ensureLoggedIn();
+    });
+
     it('should checkout, extract order ID, and search for it successfully', async () => {
         // 1. Setup: Seed cart via API
         const seedPayload = {

@@ -1,13 +1,13 @@
 # Mobile Automation Architecture POC
 
-This repository serves as a comprehensive Proof of Concept (POC) demonstrating how a single backend API can power multiple frontend clients (React Native, Flutter) and be validated by three of the industry's leading mobile test automation frameworks: **WebdriverIO (Appium)**, **Detox**, and **Maestro**.
+This repository is a starter/demo for mobile QA automation. A small Express API powers a React Native shopping app, with example suites in **WebdriverIO (Appium)**, **Detox**, and **Maestro**. A Flutter client is also included as a separate prototype.
 
 ## 🏗️ Architecture Overview
 
 The workspace is organized as a monorepo consisting of:
 - **`apps/api`**: A mock Node.js/Express backend storing cart/order state in memory.
 - **`apps/mobile`**: The React Native frontend (Awesome Shop).
-- **`apps/flutter-mobile`**: The Flutter frontend twin (coming soon).
+- **`apps/flutter_mobile`**: Flutter client prototype; the Android test instructions below target React Native.
 - **`apps/e2e-wdio`**: The WebdriverIO (Appium) E2E suite.
 - **`apps/e2e-detox`**: The Detox gray-box E2E suite.
 - **`apps/e2e-maestro`**: The Maestro black-box E2E suite.
@@ -25,6 +25,8 @@ npm start
 # Server runs on http://0.0.0.0:3005
 ```
 
+Run the API tests from `apps/api` with `npm test`. They cover the checkout-to-order-lookup flow and invalid requests without an emulator.
+
 ### 2. Start the Mobile Client
 Currently, the primary client is the React Native app.
 ```bash
@@ -38,7 +40,7 @@ npx expo start
 
 ## 🧪 E2E Automation Suites
 
-This repo is structured to demonstrate three paradigms of mobile testing. All suites perform advanced **State Injection** via HTTP API seeding before driving the UI.
+These suites demonstrate three mobile automation styles. The checkout examples seed a cart through the API before driving the UI; other flows exercise login, saved carts, and order lookup.
 
 ### Option 1: Maestro (The Modern Black-Box Standard)
 Maestro relies heavily on accessibility layers and structural validation, written completely in YAML.
@@ -52,7 +54,7 @@ Maestro relies heavily on accessibility layers and structural validation, writte
   maestro test order-lookup-flow.yaml
   maestro test save-cart-flow.yaml
   ```
-* **Why this matters**: Maestro can extract strings from the UI (like our dynamic `ORD-XXXXXX` IDs) and push them back into input fields seamlessly. Because it's black box, the exact same `.yaml` scripts can test both the React Native and Flutter binaries without modification!
+* **What it demonstrates**: YAML flows can read a generated order ID from the UI and use it in a later search. The current scripts target the React Native app ID and labels; reuse with Flutter would require verifying its identifiers and UI text.
 
 ### Option 2: Detox (The React Native Gray-Box Standard)
 Detox integrates deeply with the React Native event loop to provide synchronized, flake-free testing.
@@ -67,13 +69,14 @@ Detox integrates deeply with the React Native event loop to provide synchronized
 * **How to run**:
   ```bash
   cd apps/e2e-detox
-  detox test -c android.emu.debug
+  npx detox build -c android.emu.debug
+  npx detox test -c android.emu.debug
   ```
 
 ### Option 3: WebdriverIO / Appium (The Legacy Enterprise Standard)
 Appium provides the most robust cross-platform capability but requires heavy SDK configuration.
 
-* **Setup**: Requires Java, Android SDK, and a running Appium Server with the `uiautomator2` driver.
+* **Setup**: Requires Java, Android SDK, an Android emulator, and the `uiautomator2` driver (`npx appium driver install uiautomator2` from `apps/e2e-wdio`). Build and install the React Native APK first; this configuration connects to the installed `com.mobileautomationpoc` app.
 * **How to run**:
   ```bash
   cd apps/e2e-wdio
@@ -85,8 +88,7 @@ Appium provides the most robust cross-platform capability but requires heavy SDK
 
 ## ♿ Accessibility (A11y) Auditing
 
-While Maestro inherently tests accessibility by tapping semantic labels, deep auditing is best handled via Appium.
-By installing `@axe-core/appium` inside the WebdriverIO suite, you can scan the view hierarchy for WCAG violations (contrast, touch targets) during runtime.
+The test suites use accessibility labels and IDs for mobile element lookup. A dedicated automated accessibility audit is a possible next example; it is not currently part of the passing test claims.
 
 ---
 
@@ -96,7 +98,7 @@ To ensure pixel-perfect rendering across different screen sizes and OS versions,
 Applitools uses Visual AI to detect visual bugs rather than relying solely on DOM/view hierarchy matching.
 
 * **Architecture**: The VRT implementation is housed within the WebdriverIO suite (`apps/e2e-wdio/test/specs/vrt.spec.js`).
-* **Execution**: It utilizes the `@applitools/eyes-webdriverio` SDK alongside the `VisualGridRunner`.
+* **Execution**: The optional example uses the `@applitools/eyes-webdriverio` SDK alongside the `VisualGridRunner`.
 * **Cross-Environment**: The configuration allows for simulating how the app looks across multiple mock devices (e.g., iPhone 11 vs Pixel 5) simultaneously via the Applitools Ultrafast Grid.
 
 *Note: For the purpose of this portfolio piece, the execution code exists to demonstrate architectural knowledge but skips actual cloud execution unless a valid `APPLITOOLS_API_KEY` is provided in the environment.*
@@ -106,12 +108,14 @@ Applitools uses Visual AI to detect visual bugs rather than relying solely on DO
 ## ⚡ Performance Testing (Flashlight / BAM)
 While E2E tests ensure functional correctness, mobile apps require strict performance auditing (60FPS rendering, minimal JS thread locks).
 In the React Native ecosystem, we recommend **Flashlight.dev**. It measures performance across E2E flows to ensure no new feature introduces dropped frames or heavy CPU spikes.
-* **Usage Example:** `flashlight measure --bundleId com.anonymous.mobile --duration 10000`
+* **Usage Example:** `flashlight measure --bundleId com.mobileautomationpoc --duration 10000`
 
 ---
 
 ## 🤖 CI/CD Integration
 This repository includes fully configured **GitHub Actions** pipelines (`.github/workflows/maestro-ci.yml` and `detox-ci.yml`). 
+
+Both mobile workflows are manually triggered. The API tests can run locally without an emulator; WDIO is a local showcase and is not part of these workflows. See the [Actions history](https://github.com/KCooper37/mobile-automation-poc/actions) for recorded runs.
 
 *Note: These pipelines are currently configured to run manually via `workflow_dispatch` rather than on every push. Running headless Android Emulators alongside the React Native Metro Bundler on GitHub's free-tier runners often hits CPU/Memory limits, leading to flakiness and bridge timeouts. For a POC, executing these suites locally is the recommended way to verify the architecture.*
 
@@ -124,4 +128,4 @@ The pipelines are configured to:
 
 ---
 
-*This POC proves that a unified QA strategy—blending API state seeding with declarative UI interaction—can seamlessly scale across any mobile tech stack.*
+The core example combines API state seeding with mobile UI assertions so test setup and user-visible behavior can be inspected separately.

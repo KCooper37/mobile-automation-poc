@@ -8,13 +8,13 @@ appId: com.mobileautomationpoc
 - inputText: "admin"
 - tapOn: "Password"
 - inputText: "password"
-- tapOn: "Login"
+- tapOn: "Log In"
 
 - tapOn: "🛒"
 - assertVisible: "Your Cart"
 
 - tapOn: "maestro_e2e_cart"
-- assertVisible: "Success! Order placed.*"
+- assertVisible: "Loaded cart: maestro_e2e_cart"
 
 - tapOn: "Checkout Cart"
-- assertVisible: "Order ID: ORD-*"
+- assertVisible: "Order ID: ORD-.*"

@@ -8,10 +8,10 @@ appId: com.mobileautomationpoc
 - inputText: "admin"
 - tapOn: "Password"
 - inputText: "password"
-- tapOn: "Login"
+- tapOn: "Log In"
 
 - tapOn: "🛒"
-- tapOn: "Load Seed Cart"
+- tapOn: "maestro_e2e_cart"
 - tapOn: "Checkout Cart"
 
 # Wait for Success Message
@@ -22,9 +22,9 @@ appId: com.mobileautomationpoc
     id: "checkout-status"
 
 # Extract just the ID using a regex via JS eval
-- evalScript: ${output.orderId = maestro.copiedText.split('Order ID: ')[1]}
+- evalScript: "${output.orderId = maestro.copiedText.split('Order ID: ')[1]}"
 
-- tapOn: "← Back"
+- assertVisible: "Featured Products"
 - tapOn: "🔍"
 - inputText: ${output.orderId}
 - tapOn: "Search"

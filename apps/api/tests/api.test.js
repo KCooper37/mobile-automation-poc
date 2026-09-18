@@ -10,12 +10,27 @@ describe('API Endpoints', () => {
     });
 
     describe('POST /api/checkout', () => {
-        it('returns success for valid cart array', async () => {
+        it('creates an order that can be retrieved by its ID', async () => {
+            const cart = [{ id: 1, name: 'Sample Item', price: 9.99, quantity: 2 }];
             const res = await request(app)
                 .post('/api/checkout')
-                .send({ cart: [{ id: 1 }] });
+                .send({ cart });
             expect(res.statusCode).toEqual(200);
             expect(res.body.success).toBe(true);
+            expect(res.body.orderId).toMatch(/^ORD-\d+$/);
+
+            const lookup = await request(app).get(`/api/orders/${res.body.orderId}`);
+            expect(lookup.statusCode).toBe(200);
+            expect(lookup.body).toEqual({
+                success: true,
+                order: { id: res.body.orderId, cart }
+            });
+        });
+
+        it('returns 404 for an unknown order ID', async () => {
+            const res = await request(app).get('/api/orders/ORD-does-not-exist');
+            expect(res.statusCode).toBe(404);
+            expect(res.body.success).toBe(false);
         });
 
         it('returns 400 when cart is missing', async () => {

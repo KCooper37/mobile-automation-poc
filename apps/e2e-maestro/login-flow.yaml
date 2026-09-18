@@ -6,7 +6,7 @@ appId: com.mobileautomationpoc
 - inputText: "admin"
 - tapOn: "Password"
 - inputText: "password"
-- tapOn: "Login"
+- tapOn: "Log In"
 - assertVisible: "Awesome Shop"
 - tapOn:
     id: "logout-button"

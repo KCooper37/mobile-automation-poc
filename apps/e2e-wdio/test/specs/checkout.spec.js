@@ -4,6 +4,10 @@ const CartScreen = require('../pageobjects/CartScreen');
 
 describe('Mobile App - Core Checkout', () => {
 
+    beforeEach(async () => {
+        await ProductsScreen.ensureLoggedIn();
+    });
+
     it('should inject state via API and checkout', async () => {
         // 1. Setup: Seed the cart via API before testing the UI
         const seedPayload = {

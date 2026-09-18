@@ -1,10 +1,12 @@
-const { Eyes, Target, Configuration, VisualGridRunner, BrowserType, DeviceName, ScreenOrientation } = require('@applitools/eyes-webdriverio');
+const { Eyes, Target, Configuration, VisualGridRunner, DeviceName, ScreenOrientation } = require('@applitools/eyes-webdriverio');
+const ProductsScreen = require('../pageobjects/ProductsScreen');
 
-describe('Visual Regression Testing (Mocked)', () => {
+describe('Visual Regression Testing (Applitools)', () => {
   let eyes;
   let runner;
   
   before(async () => {
+    if (!process.env.APPLITOOLS_API_KEY) return;
     // 1. Initialize the Runner (VisualGridRunner for Ultrafast Grid)
     runner = new VisualGridRunner({ testConcurrency: 5 });
     
@@ -13,7 +15,7 @@ describe('Visual Regression Testing (Mocked)', () => {
     
     // 3. Configure Applitools
     const config = new Configuration();
-    config.setApiKey(process.env.APPLITOOLS_API_KEY || 'mock-api-key');
+    config.setApiKey(process.env.APPLITOOLS_API_KEY);
     config.setBatch({ name: 'Awesome Shop Mobile VRT' });
     
     // Cross-environment testing configuration (mocked)
@@ -23,32 +25,22 @@ describe('Visual Regression Testing (Mocked)', () => {
     eyes.setConfiguration(config);
   });
   
-  it('should visually validate the products screen', async () => {
-    // Mock the SDK execution so it doesn't fail without a real API key
+  it('should visually validate the products screen', async function () {
     if (!process.env.APPLITOOLS_API_KEY) {
-      console.log('Skipping Applitools execution: No API Key provided.');
-      return;
+      this.skip();
     }
-    
-    try {
-      // 4. Open Eyes to start visual testing
-      await eyes.open(driver, 'Awesome Shop', 'Products Screen');
-      
-      // 5. Check the current viewport
-      await eyes.check('Products Page Loaded', Target.window().fully());
-      
-      // 6. Close Eyes to calculate results
-      await eyes.closeAsync();
-    } catch (e) {
-      console.error(e);
-    }
+
+    await ProductsScreen.ensureLoggedIn();
+    await eyes.open(driver, 'Awesome Shop', 'Products Screen');
+    await eyes.check('Products Page Loaded', Target.window().fully());
+    await eyes.closeAsync();
   });
 
   after(async () => {
     if (!process.env.APPLITOOLS_API_KEY) return;
     
     // 7. Wait for all visual grids to finish
-    const results = await runner.getAllTestResults(false);
+    const results = await runner.getAllTestResults(true);
     console.log(results);
   });
 });
